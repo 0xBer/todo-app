@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
@@ -15,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		if (!secretOrKey) throw new Error('No secret key provided');
 
 		super({
-			jwtFromRequest: ExtractJwt.FromAuthHeaderAsBearerToken(),
+			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 			secretOrKey,
 		});
 	}
@@ -27,7 +27,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 			},
 		});
 
-		if (!user) throw new Error('No user was found');
+		if (!user) throw new UnauthorizedException('No user was found');
 
 		const { password, ...userData } = user;
 
