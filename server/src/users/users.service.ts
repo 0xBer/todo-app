@@ -4,10 +4,22 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class UsersService {
 	constructor(private prisma: PrismaService) {}
-	findOne(id: number) {
-		return this.prisma.user.findUnique({
+
+	async findOne(id: number) {
+		return await this.prisma.user.findUnique({
 			where: {
 				id,
+			},
+			omit: {
+				password: true,
+			},
+		});
+	}
+
+	async findAll() {
+		return await this.prisma.user.findMany({
+			omit: {
+				password: true,
 			},
 		});
 	}
